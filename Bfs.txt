@@ -1,0 +1,27 @@
+
+class Bfs(Algorithm):
+    def get_steps(self, initial_state, goal_state):
+        solution_actions=[] #actions to final solution
+        state=initial_state
+        legal_actions=self.get_legal_actions(state) #actions that can be performed from state
+
+        state_action_list=[] #state,action,prev
+        for action in legal_actions:
+            state_action_list.append([state,action,-1])
+        index=0
+        visited={initial_state:0} #visited states
+        while 1:
+            new_state=self.apply_action(state_action_list[index][0],state_action_list[index][1])
+            if (new_state==goal_state): break #reached the final state
+            index+=1
+
+            if new_state not in visited.keys():
+                legal_actions=self.get_legal_actions(new_state)
+                visited.update({new_state:0}) #shortest path
+                for action in legal_actions:
+                    state_action_list.append([new_state, action,index-1])
+        while index!=0:
+                solution_actions.append(state_action_list[index][1])
+                index=state_action_list[ index ][ 2 ]
+        solution_actions.reverse()
+        return solution_actions
